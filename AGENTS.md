@@ -35,7 +35,7 @@ Then, before starting any phase, read the relevant files below:
 | `.agents/context/ui-context.md` | Component library, theme, color scheme, layout and behavior patterns |
 | `.agents/context/progress-tracker.md` | Current phase, feature checklist, project decisions, blockers |
 
-Read all files relevant to the current task. If a file is empty or marked as a placeholder, skip it and continue.
+Read all files relevant to the current task. Do not assume their current stage
 
 ---
 
