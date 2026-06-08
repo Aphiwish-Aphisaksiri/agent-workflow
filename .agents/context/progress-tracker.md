@@ -29,7 +29,7 @@ Add entries as they are made. Example:
 
 <!-- Check off features as they are fully implemented. Link to the plan file. -->
 
-- [ ] [`000-agentsworkflow`](./../feature/000-agentsworkflow.md) — Agent workflow blueprint
+- [ ] [`000-populate-workflow-files`](./../feature/000-populate-workflow-files.md) — Agent workflow blueprint
 
 <!-- Add rows as new feature plans are created:
 - [ ] [`001-feature-name`](./../feature/001-feature-name.md) — Short description
