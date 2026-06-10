@@ -150,7 +150,7 @@ Execute the approved plan faithfully. No design decisions, no scope additions.
 2. Read all relevant `.agents/context/` files.
 3. Execute all implementation steps in the plan in order. If a step is ambiguous during execution, **stop** — present concrete interpretations (Option A, B, and/or C), give your recommendation with reasoning, and wait for the user to decide before continuing.
 4. Run the **Verification** steps from the plan — build, lint, tests, and smoke-test as applicable. If any check fails, fix the issue before proceeding.
-5. Check off all completed steps (`- [x]`).
+5. Update the feature plan file — Check off all completed steps (`- [x]`).
 6. Report a summary of what was done.
 7. Update `.agents/context/progress-tracker.md` — check off the completed feature, update **Current Phase**, **Next Steps**, and clear any resolved **Blockers**.
 
