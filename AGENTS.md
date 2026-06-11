@@ -35,7 +35,7 @@ Then, before starting any phase, read the relevant files below:
 | `.agents/context/ui-context.md` | Component library, theme, color scheme, layout and behavior patterns |
 | `.agents/context/progress-tracker.md` | Current phase, feature checklist, project decisions, blockers |
 
-Read all files relevant to the current task. If a file is empty or marked as a placeholder, skip it and continue.
+Read all files relevant to the current task. Do not assume their current stage.
 
 ---
 
@@ -71,37 +71,10 @@ Translate a high-level goal into a complete, unambiguous plan document that can 
 
 ### Steps
 1. Read `.agents/feature/NNN-example.md` for the plan structure and conventions.
-2. Read all relevant `.agents/context/` files.
-3. Analyze the goal and identify missing information, ambiguous requirements, and decisions that must be made before a solid plan can be written.
-4. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds.
-5. Write the plan to `.agents/feature/NNN-[feature-name].md` using the template below.
-6. Summarize the plan and list any items left as open questions.
-
-### Plan Document Template
-
-```markdown
-# NNN — [Feature Name]
-
-## Goal
-[One paragraph describing what this feature achieves and why.]
-
-## Background / Context
-[Relevant project context, constraints, prior decisions.]
-
-## Decisions Made
-- **[Decision topic]:** [Choice made] — [Rationale]
-
-## Out of Scope
-- [Explicitly excluded items to prevent scope creep]
-
-## Implementation Steps
-- [ ] Step 1
-- [ ] Step 2
-- [ ] Step 3
-
-## Open Questions
-[Questions that remain unresolved. Should be empty before handing to Implement.]
-```
+2. Analyze the goal and identify missing information, ambiguous requirements, and decisions that must be made before a solid plan can be written.
+3. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds.
+4. Write the plan to `.agents/feature/NNN-[feature-name].md` following the structure defined in `NNN-example.md`.
+5. Summarize the plan and list any items left as open questions.
 
 ### Rules
 - Do not write any code or make file changes during this phase.
@@ -120,16 +93,19 @@ Find weaknesses, gaps, and hidden assumptions in an existing plan before it reac
 ### Steps
 1. Read `.agents/feature/NNN-example.md` to confirm expected plan structure and conventions.
 2. Read the target plan from `.agents/feature/`.
-3. Read all relevant `.agents/context/` files.
-4. Systematically evaluate the plan:
+3. Systematically evaluate the plan:
    - Are all steps concrete and actionable?
    - Are there missing edge cases, error conditions, or rollback needs?
    - Do any steps contradict each other or the context files?
    - Are all external dependencies identified?
    - Would a developer be able to implement every step without ambiguity?
-4. **If clarification is needed from the user:** Consolidate all questions into a single response. Ask follow-ups only when new gaps emerge from answers.
-5. Update the plan document with resolved decisions, revised steps, and any structural changes.
-6. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
+4. **Present your analysis to the user.** Include:
+   - Weaknesses and gaps found
+   - Open questions that need user input
+   - Suggested changes (with rationale)
+5. **STOP. Do not edit any files until the user responds.**
+6. After receiving user answers, update the plan document with resolved decisions, revised steps, and any structural changes. Add a refinement round entry at the top of the plan documenting concerns raised and how they were resolved.
+7. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
 
 ### Rules
 - Do not implement anything during this phase.
@@ -146,16 +122,15 @@ Find weaknesses, gaps, and hidden assumptions in an existing plan before it reac
 Execute the approved plan faithfully. No design decisions, no scope additions.
 
 ### Steps
-1. Read the target plan from `.agents/feature/`. Verify **Open Questions** is empty. If not, stop — see rules below.
-2. Read all relevant `.agents/context/` files.
-3. Execute all implementation steps in the plan in order. If a step is ambiguous during execution, **stop** — present concrete interpretations (Option A, B, and/or C), give your recommendation with reasoning, and wait for the user to decide before continuing.
-4. Run the **Verification** steps from the plan — build, lint, tests, and smoke-test as applicable. If any check fails, fix the issue before proceeding.
-5. Check off all completed steps (`- [x]`).
-6. Report a summary of what was done.
-7. Update `.agents/context/progress-tracker.md` — check off the completed feature, update **Current Phase**, **Next Steps**, and clear any resolved **Blockers**.
+1. Read the target plan from `.agents/feature/`. Verify **Open Questions** is empty. If not, stop and ask the user to run a Refine pass first.
+2. Execute all implementation steps in the plan in order.
+3. Run the **Verification** steps from the plan — build, lint, type-check, tests, integration / smoke-test, and regression as applicable. If any check fails, fix the issue before proceeding.
+4. Update the feature plan file — Check off all completed steps (`- [x]`). Only do this after all verification passes.
+5. Report a summary of what was done.
+6. Update `.agents/context/progress-tracker.md` — check off the completed feature, update **Current Phase**, **Next Steps**, and clear any resolved **Blockers**.
 
 ### Rules
-- **Do not make architectural or design decisions.** If a real decision is required and cannot be safely inferred, STOP immediately. Report what is blocked and why, then ask the user to run a Refine pass before continuing.
+- **Do not make architectural or design decisions.** If a step is ambiguous during execution, **stop** — present concrete interpretations (Option A, B, and/or C), give your recommendation with reasoning, and wait for the user to decide before continuing. If a real decision is required and cannot be safely inferred, report what is blocked and ask the user to run a Refine pass.
 - Do not add features, improvements, or refactors that are not in the plan.
 - Do not bypass safety checks or destructive operations without explicit confirmation in the plan.
 - Check off steps only after all verification passes, not during implementation.
@@ -173,23 +148,15 @@ This phase can be used in two ways:
 ### Objective
 Apply a narrow, well-scoped fix to an existing issue. No architectural decisions, no new features, no refactoring beyond what is required to resolve the stated problem.
 
-### Fix Types
-- **Visual** — layout, spacing, color, responsiveness, or rendering issues
-- **Behavioral** — incorrect logic, broken flow, wrong output, missing validation
-- **Code quality** — a specific linting violation, dead code, obvious naming issue *(not a full refactor)*
-
 ### Steps
-1. Read `.agents/context/ai-workflow-rules.md`, `code-standards.md`, and `architecture.md` (minimum required context).
-2. Read the affected files to understand the current state.
-3. Identify the exact root cause of the issue described.
-4. If the fix requires a design decision or touches more than the stated scope, **stop** — present Option A and Option B with a recommendation and ask the user whether to proceed or escalate to a Plan.
-5. Apply the fix, scoped strictly to what was described.
-6. Report what was changed and why.
+1. Read the affected files to understand the current state.
+2. Identify the exact root cause of the issue described.
+3. Apply the fix, scoped strictly to what was described.
+4. Report what was changed and why.
 
 ### Rules
 - No refactoring beyond the fix.
-- No design or architectural decisions — if one is required, escalate to Plan.
-- If the fix scope turns out to be larger than expected, stop and report before continuing.
+- **No design or architectural decisions.** If the fix requires a design decision or touches more than the stated scope, **stop** — present Option A and Option B with a recommendation and ask the user whether to proceed or escalate to a Plan.
 - Do not update `progress-tracker.md` for fixes unless the fix resolves a tracked blocker.
 
 ---

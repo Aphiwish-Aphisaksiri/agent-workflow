@@ -69,7 +69,9 @@ Status: Draft / Refined / Ready / Completed
 ---
 
 ## Verification
-- **Build:** Run `[build command]` — expect zero errors.
-- **Lint:** Run `[lint command]` — expect zero warnings or errors.
-- **Tests:** Run `[test command]` — all existing and new tests pass.
-- **Smoke-test:** [Describe a manual or scripted check of core behavior — e.g., "Navigate to /feature-page and confirm X renders correctly and Y action triggers Z response."]
+- [ ] **Build:** Run `[build command]` — expect zero errors.
+- [ ] **Lint:** Run `[lint command]` — expect zero warnings or errors.
+- [ ] **Type-check:** Run `[type-check command]` — expect zero errors.
+- [ ] **Tests:** Run `[test command]` — all existing and new tests pass.
+- [ ] **Integration / Smoke-test:** [Describe a manual or scripted check of core behavior — e.g., "Navigate to /feature-page and confirm X renders correctly and Y action triggers Z response."]
+- [ ] **Regression:** [Identify one related area and confirm it still works — e.g., "Existing feature Z still passes its tests and behaves unchanged."]

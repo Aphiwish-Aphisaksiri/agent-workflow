@@ -1,4 +1,6 @@
-# 000 — Populate Agent Workflow Files
+# Feature 000: Populate Agent Workflow Files
+
+Status: Ready
 
 ## Goal
 
@@ -8,26 +10,9 @@ Provide a reusable, step-by-step blueprint that any agent can follow to fully po
 
 The agent workflow system relies on several context files that agents read at the start of every interaction. When a new project is bootstrapped, these files contain empty placeholders. This blueprint ensures they are populated accurately and completely before any development work begins.
 
-**Files to populate:**
-- `AGENTS.md` (only if project-specific overrides are needed)
-- `.agents/context/ai-workflow-rules.md`
-- `.agents/context/project-context.md`
-- `.agents/context/architecture.md`
-- `.agents/context/code-standards.md`
-- `.agents/context/ui-context.md`
-- `.agents/context/progress-tracker.md`
-- `.agents/docs/README.md`
+## Depends on (if any)
 
-## Decisions Made
-
-- **Interview style:** One batch of all questions upfront. A second round is allowed only if user answers introduce new gaps — not as a routine follow-up.
-- **Question depth:** Specific, per-field questions matching each placeholder section in the target file.
-- **Fallback — minor/undecided field:** Leave as placeholder comment; record as an open question in `progress-tracker.md` if non-blocking.
-- **Fallback — critical missing info:** Record as a blocker in `progress-tracker.md`.
-- **Agent autonomy:** If the user explicitly says the agent may decide a minor detail, pick the best option based on reasoning, document the decision inline, and note it in the post-write summary.
-- **Existing content — merge:** Fill empty sections and leave already-populated sections intact by default.
-- **Existing content — conflict:** If an incoming answer conflicts with existing content, pause and ask the user to resolve before writing that file.
-- **Output timing:** Write all files immediately once all answers are processed, then post a summary to chat.
+- The `.agents/` folder structure must already be scaffolded (empty template files in place)
 
 ## Out of Scope
 
@@ -36,19 +21,39 @@ The agent workflow system relies on several context files that agents read at th
 - Populating `.agents/docs/` with actual reference document files (only the `README.md` index is updated here)
 - Making architectural decisions on behalf of the user without explicit permission
 
+## Affected Files
+
+- `AGENTS.md` — updated only if the user specifies project-level overrides
+- `.agents/context/ai-workflow-rules.md` — workflow mode, development order, restrictions
+- `.agents/context/project-context.md` — project name, description, users, workflows, setup
+- `.agents/context/architecture.md` — stack, structure, request flow, patterns
+- `.agents/context/code-standards.md` — naming, organization, testing, tooling
+- `.agents/context/ui-context.md` — component library, CSS approach, theme, layout patterns
+- `.agents/context/progress-tracker.md` — current phase, checklist, blockers, next steps
+- `.agents/docs/README.md` — reference document index
+
+## Design Decisions
+
+- **Interview style:** One batch of all questions upfront — a second round is allowed only if user answers introduce new gaps, not as a routine follow-up.
+- **Question depth:** Specific, per-field questions matching each placeholder section in the target file.
+- **Fallback — minor/undecided field:** Leave as placeholder comment; record as an open question in `progress-tracker.md` if non-blocking.
+- **Fallback — critical missing info:** Record as a blocker in `progress-tracker.md`.
+- **Agent autonomy:** If the user explicitly says the agent may decide a minor detail, pick the best option based on reasoning, document the decision inline, and note it in the post-write summary.
+- **Existing content — merge:** Fill empty sections and leave already-populated sections intact by default.
+- **Existing content — conflict:** If an incoming answer conflicts with existing content, pause and ask the user to resolve before writing that file.
+- **Output timing:** Write all files immediately once all answers are processed, then post a summary to chat.
+
 ---
 
 ## Implementation Steps
 
-### Phase A — Read & Assess
+### Phase A: Read & Assess
 
 - [ ] Read all existing context files and `AGENTS.md`
 - [ ] Identify which sections are already populated vs. empty placeholder
 - [ ] Note any existing content that may conflict with incoming answers
 
----
-
-### Phase B — Interview the User
+### Phase B: Interview the User
 
 Ask **all questions below in a single batch**. Group them clearly by file so the user can answer in any order. If a question does not apply to the project, the user may skip it.
 
@@ -134,9 +139,7 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 
 42. Are there any reference documents to add to the index? *(API specs, design docs, research notes, external references)* — If yes, provide a filename and one-line description for each.
 
----
-
-### Phase C — Process Answers
+### Phase C: Process Answers
 
 - [ ] For each answered field: prepare the merged content for that file section
 - [ ] For each unanswered/deferred field:
@@ -145,9 +148,7 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 - [ ] For any conflict with existing content: stop and ask the user to resolve before writing that file
 - [ ] If agent is permitted to decide a minor detail: make the decision, note it inline in the file, and include it in the Phase E summary
 
----
-
-### Phase D — Write Files
+### Phase D: Write Files
 
 - [ ] Write `.agents/context/ai-workflow-rules.md`
 - [ ] Write `.agents/context/project-context.md`
@@ -158,18 +159,33 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 - [ ] Update `.agents/docs/README.md` index
 - [ ] Update `AGENTS.md` only if the user specified overrides in questions 1–2
 
----
-
-### Phase E — Summary
+### Phase E: Summary & User Verification
 
 - [ ] Post a chat summary listing:
   - Files written and their completion status *(full / partial)*
   - Fields left as placeholder and the reason
   - Any conflicts resolved or still pending user input
   - Agent decisions made autonomously *(if any)*
+- [ ] Wait for user to review and confirm the summary
+- [ ] If user provides feedback or change requests, apply corrections before marking complete
 
 ---
 
-## Open Questions
+## Open Questions (if any)
 
 *(None — all decisions resolved before writing this plan.)*
+
+---
+
+## Blockers (if any)
+
+*(None.)*
+
+---
+
+## Verification
+
+- [ ] **Completeness:** All context files have no remaining empty placeholders (unless explicitly deferred and tracked in `progress-tracker.md`).
+- [ ] **Accuracy:** `progress-tracker.md` accurately reflects the current project state, open questions, and blockers.
+- [ ] **Consistency:** No unresolved conflicts between files remain.
+- [ ] **User approval:** Summary posted to user; user has reviewed and confirmed the populated content. If user gives feedback to change, corrections must be applied before this feature is marked complete.
