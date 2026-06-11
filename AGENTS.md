@@ -74,34 +74,8 @@ Translate a high-level goal into a complete, unambiguous plan document that can 
 2. Read all relevant `.agents/context/` files.
 3. Analyze the goal and identify missing information, ambiguous requirements, and decisions that must be made before a solid plan can be written.
 4. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds.
-5. Write the plan to `.agents/feature/NNN-[feature-name].md` using the template below.
+5. Write the plan to `.agents/feature/NNN-[feature-name].md` following the structure defined in `NNN-example.md`.
 6. Summarize the plan and list any items left as open questions.
-
-### Plan Document Template
-
-```markdown
-# NNN — [Feature Name]
-
-## Goal
-[One paragraph describing what this feature achieves and why.]
-
-## Background / Context
-[Relevant project context, constraints, prior decisions.]
-
-## Decisions Made
-- **[Decision topic]:** [Choice made] — [Rationale]
-
-## Out of Scope
-- [Explicitly excluded items to prevent scope creep]
-
-## Implementation Steps
-- [ ] Step 1
-- [ ] Step 2
-- [ ] Step 3
-
-## Open Questions
-[Questions that remain unresolved. Should be empty before handing to Implement.]
-```
 
 ### Rules
 - Do not write any code or make file changes during this phase.
