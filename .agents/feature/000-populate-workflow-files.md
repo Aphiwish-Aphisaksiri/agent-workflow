@@ -185,7 +185,7 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 
 ## Verification
 
-- **Completeness:** All context files have no remaining empty placeholders (unless explicitly deferred and tracked in `progress-tracker.md`).
-- **Accuracy:** `progress-tracker.md` accurately reflects the current project state, open questions, and blockers.
-- **Consistency:** No unresolved conflicts between files remain.
-- **User approval:** Summary posted to user; user has reviewed and confirmed the populated content. If user gives feedback to change, corrections must be applied before this feature is marked complete.
+- [ ] **Completeness:** All context files have no remaining empty placeholders (unless explicitly deferred and tracked in `progress-tracker.md`).
+- [ ] **Accuracy:** `progress-tracker.md` accurately reflects the current project state, open questions, and blockers.
+- [ ] **Consistency:** No unresolved conflicts between files remain.
+- [ ] **User approval:** Summary posted to user; user has reviewed and confirmed the populated content. If user gives feedback to change, corrections must be applied before this feature is marked complete.

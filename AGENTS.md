@@ -35,7 +35,7 @@ Then, before starting any phase, read the relevant files below:
 | `.agents/context/ui-context.md` | Component library, theme, color scheme, layout and behavior patterns |
 | `.agents/context/progress-tracker.md` | Current phase, feature checklist, project decisions, blockers |
 
-Read all files relevant to the current task. Do not assume their current stage
+Read all files relevant to the current task. Do not assume their current stage.
 
 ---
 
@@ -124,7 +124,7 @@ Execute the approved plan faithfully. No design decisions, no scope additions.
 ### Steps
 1. Read the target plan from `.agents/feature/`. Verify **Open Questions** is empty. If not, stop and ask the user to run a Refine pass first.
 2. Execute all implementation steps in the plan in order.
-3. Run the **Verification** steps from the plan — build, lint, tests, and smoke-test as applicable. If any check fails, fix the issue before proceeding.
+3. Run the **Verification** steps from the plan — build, lint, type-check, tests, integration / smoke-test, and regression as applicable. If any check fails, fix the issue before proceeding.
 4. Update the feature plan file — Check off all completed steps (`- [x]`). Only do this after all verification passes.
 5. Report a summary of what was done.
 6. Update `.agents/context/progress-tracker.md` — check off the completed feature, update **Current Phase**, **Next Steps**, and clear any resolved **Blockers**.
