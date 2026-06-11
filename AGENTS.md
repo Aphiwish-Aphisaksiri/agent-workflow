@@ -127,9 +127,13 @@ Find weaknesses, gaps, and hidden assumptions in an existing plan before it reac
    - Do any steps contradict each other or the context files?
    - Are all external dependencies identified?
    - Would a developer be able to implement every step without ambiguity?
-4. **If clarification is needed from the user:** Consolidate all questions into a single response. Ask follow-ups only when new gaps emerge from answers.
-5. Update the plan document with resolved decisions, revised steps, and any structural changes.
-6. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
+5. **Present your analysis to the user.** Include:
+   - Weaknesses and gaps found
+   - Open questions that need user input
+   - Suggested changes (with rationale)
+6. **STOP. Do not edit any files until the user responds.**
+7. After receiving user answers, update the plan document with resolved decisions, revised steps, and any structural changes.
+8. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
 
 ### Rules
 - Do not implement anything during this phase.
