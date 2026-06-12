@@ -66,7 +66,21 @@ Fill in the files under `.agents/context/` with your project's details. At minim
 - `architecture.md` — your tech stack and folder structure
 - `ai-workflow-rules.md` — any project-specific rules that override default agent behavior
 
-### 2. Set up your AI agent
+### 2. Keep agent files local (optional)
+
+If you treat agent workflow files as personal tooling (not shared with the team), add them to `.git/info/exclude` so they never appear in diffs or get pushed to remote:
+
+```
+# .git/info/exclude
+AGENTS.md
+.agents/
+```
+
+> **Why `.git/info/exclude` instead of `.gitignore`?** It's per-repo and local-only — no commit required, no noise in PRs, invisible to collaborators. Perfect for files that are useful to you but not necessarily the team.
+
+If you run `Implement: 000`, the agent will ask you about this directly during setup.
+
+### 3. Set up your AI agent
 
 Copy or symlink `AGENTS.md` to the location your agent platform reads:
 
@@ -76,7 +90,7 @@ Copy or symlink `AGENTS.md` to the location your agent platform reads:
 | Cursor | `.cursorrules` |
 | Other | `AGENTS.md` (root) |
 
-### 3. Start a session
+### 4. Start a session
 
 Begin any prompt with the appropriate phase prefix:
 
