@@ -43,7 +43,17 @@ README.md                        ← This file
 
 ## Getting Started
 
-### 1. Configure context files
+### 1. Set up your AI agent
+
+Copy or symlink `AGENTS.md` to the location your agent platform reads:
+
+| Platform | File location |
+|---|---|
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| Cursor | `.cursorrules` |
+| Other | `AGENTS.md` (root) |
+
+### 2. Configure context files
 
 You can do this manually **or** let the agent do it for you.
 
@@ -51,9 +61,11 @@ You can do this manually **or** let the agent do it for you.
 
 Run the following in your agent:
 
+```text
+Read AGENTS.md and Implement: 000
 ```
-Implement: 000
-```
+
+*(Note: Adding "Read AGENTS.md" ensures the agent knows how to process the `Implement` command if your IDE doesn't automatically load the rules file yet.)*
 
 Optionally add a brief description of your project, users, and tech stack after `000` — or leave it empty and the agent will ask. Either way, it interviews you for any missing information and writes the answers directly into `.agents/context/`, so every future session starts with full context.
 
@@ -66,11 +78,11 @@ Fill in the files under `.agents/context/` with your project's details. At minim
 - `architecture.md` — your tech stack and folder structure
 - `ai-workflow-rules.md` — any project-specific rules that override default agent behavior
 
-### 2. Keep agent files local (optional)
+### 3. Keep agent files local (optional)
 
 If you treat agent workflow files as personal tooling (not shared with the team), add them to `.git/info/exclude` so they never appear in diffs or get pushed to remote:
 
-```
+```text
 # .git/info/exclude
 AGENTS.md
 .agents/
@@ -78,17 +90,7 @@ AGENTS.md
 
 > **Why `.git/info/exclude` instead of `.gitignore`?** It's per-repo and local-only — no commit required, no noise in PRs, invisible to collaborators. Perfect for files that are useful to you but not necessarily the team.
 
-If you run `Implement: 000`, the agent will ask you about this directly during setup.
-
-### 3. Set up your AI agent
-
-Copy or symlink `AGENTS.md` to the location your agent platform reads:
-
-| Platform | File location |
-|---|---|
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Cursor | `.cursorrules` |
-| Other | `AGENTS.md` (root) |
+If you run the assisted setup, the agent will ask you about this directly.
 
 ### 4. Start a session
 
