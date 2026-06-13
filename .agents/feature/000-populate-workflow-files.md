@@ -42,6 +42,7 @@ The agent workflow system relies on several context files that agents read at th
 - **Existing content — merge:** Fill empty sections and leave already-populated sections intact by default.
 - **Existing content — conflict:** If an incoming answer conflicts with existing content, pause and ask the user to resolve before writing that file.
 - **Output timing:** Write all files immediately once all answers are processed, then post a summary to chat.
+- **Mandatory question — git exclude:** The `.git/info/exclude` question must always be asked and answered, even if the user skips other questions. It is not deferrable because accidentally committing personal agent workflow files is silent and irreversible without a history rewrite.
 
 ---
 
@@ -139,6 +140,12 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 
 42. Are there any reference documents to add to the index? *(API specs, design docs, research notes, external references)* — If yes, provide a filename and one-line description for each.
 
+---
+
+#### Local Environment *(Required — always ask)*
+
+43. **This question cannot be skipped.** Would you like to add `AGENTS.md` (or its platform equivalent) and `.agents/` to `.git/info/exclude`? This keeps agent workflow files local to your machine — they won't appear in diffs, PRs, or be pushed to remote. Say **no** if you want the team to share these files as a checked-in convention.
+
 ### Phase C: Process Answers
 
 - [ ] For each answered field: prepare the merged content for that file section
@@ -158,6 +165,7 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 - [ ] Write `.agents/context/progress-tracker.md`
 - [ ] Update `.agents/docs/README.md` index
 - [ ] Update `AGENTS.md` only if the user specified overrides in questions 1–2
+- [ ] If user opted in to git exclude: append `AGENTS.md` (or its platform equivalent) and `.agents/` to `.git/info/exclude`
 
 ### Phase E: Summary & User Verification
 
