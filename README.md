@@ -6,7 +6,7 @@ A phase-driven AI agent workflow system for structured software development. It 
 
 ## How It Works
 
-Every agent interaction begins with a **phase prefix** in the prompt. The agent detects the phase and follows the corresponding instructions from `AGENTS.md`.
+The agent detects the phase and follows the corresponding instructions from `AGENTS.md`.
 
 | Prompt prefix | Phase | What happens |
 |---|---|---|
