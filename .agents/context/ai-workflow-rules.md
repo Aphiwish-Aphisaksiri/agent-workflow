@@ -1,8 +1,6 @@
 # AI Workflow Rules
 
-> **Read this file first, every interaction.**
 > This file contains project-specific rules that override default agent behavior.
-> When starting a new project, ask the agent: `Meta: populate ai-workflow-rules.md based on this project`
 
 ---
 

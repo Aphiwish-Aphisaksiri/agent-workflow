@@ -1,7 +1,6 @@
 # Code Standards
 
 > **Placeholder** — Coding conventions for AI agents on this project.
-> When starting a new project, ask the agent: `Meta: populate all context files in .agents/context/ based on this project`
 
 ---
 
