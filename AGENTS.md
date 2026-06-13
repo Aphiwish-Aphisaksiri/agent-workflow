@@ -1,7 +1,7 @@
 # Agent Workflow
 
 This file defines the phase-driven workflow for AI agents on this project.
-Detect the active phase from the **first line of the user's prompt** and follow the corresponding instructions precisely.
+Detect the active phase from the user prompt, then follow the corresponding instructions below.
 
 > **Adaptation note:** This file may be renamed to `.cursorrules`, `.github/copilot-instructions.md`, or the equivalent for your agent platform. The content and conventions remain the same.
 
@@ -17,7 +17,7 @@ Detect the active phase from the **first line of the user's prompt** and follow 
 | `Fix: [what to fix]` | **Fix** | Apply a targeted fix — visual, behavioral, or code quality |
 | `Meta: [goal]` | **Meta** | Improve this workflow system itself |
 
-If no phase keyword is detected, ask the user which phase applies before proceeding.
+If no phase keyword is detected, infer the phase from context and instructions. When in doubt, ask the user for clarification.
 
 ---
 
@@ -25,7 +25,7 @@ If no phase keyword is detected, ask the user which phase applies before proceed
 
 **Every interaction, read `.agents/context/ai-workflow-rules.md` first.** This file contains project-specific rules that may override default phase behavior.
 
-Then, before starting any phase, read the relevant files below:
+Then, read any other context files relevant to the current task. Do not assume their current state.
 
 | File | Contents |
 |---|---|
@@ -34,8 +34,6 @@ Then, before starting any phase, read the relevant files below:
 | `.agents/context/code-standards.md` | File organization, naming conventions, coding patterns, testing |
 | `.agents/context/ui-context.md` | Component library, theme, color scheme, layout and behavior patterns |
 | `.agents/context/progress-tracker.md` | Current phase, feature checklist, project decisions, blockers |
-
-Read all files relevant to the current task. Do not assume their current stage.
 
 ---
 
@@ -74,8 +72,7 @@ Translate a high-level goal into a complete, unambiguous plan document that can 
 2. Analyze the goal and identify missing information, ambiguous requirements, and decisions that must be made before a solid plan can be written.
 3. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds.
 4. Write the plan to `.agents/feature/NNN-[feature-name].md` following the structure defined in `NNN-example.md`.
-5. Update `.agents/context/progress-tracker.md`.
-6. Summarize the plan and list any items left as open questions.
+5. Summarize the plan and list any items left as open questions.
 
 ### Rules
 - Do not write any code or make file changes during this phase.
@@ -94,20 +91,12 @@ Find weaknesses, gaps, and hidden assumptions in an existing plan before it reac
 ### Steps
 1. Read `.agents/feature/NNN-example.md` to confirm expected plan structure and conventions.
 2. Read the target plan from `.agents/feature/`.
-3. Systematically evaluate the plan:
-   - Are all steps concrete and actionable?
-   - Are there missing edge cases, error conditions, or rollback needs?
-   - Do any steps contradict each other or the context files?
-   - Are all external dependencies identified?
-   - Would a developer be able to implement every step without ambiguity?
+3. Systematically evaluate the plan.
 4. **Present your analysis to the user.** Include:
-   - Weaknesses and gaps found
-   - Open questions that need user input
-   - Suggested changes (with rationale)
-5. **STOP. Do not edit any files until the user responds.**
-6. After receiving user answers, update the plan document with resolved decisions, revised steps, and any structural changes. Add a refinement round entry at the top of the plan documenting concerns raised and how they were resolved.
-7. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
-8. Update `.agents/context/progress-tracker.md`.
+   - Weaknesses and gaps found with suggested changes
+   - Open questions that need user input (Suggestions are appreciated but optional)
+5. Only after receiving user answers, update the plan document with resolved decisions, revised steps, and any structural changes. Add a refinement round entry at the top of the plan documenting concerns raised and how they were resolved.
+6. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
 
 ### Rules
 - Do not implement anything during this phase.
@@ -132,7 +121,7 @@ Execute the approved plan faithfully. No design decisions, no scope additions.
 6. Update `.agents/context/progress-tracker.md`.
 
 ### Rules
-- **Do not make architectural or design decisions.** If a step is ambiguous during execution, **stop** — present concrete interpretations (Option A, B, and/or C), give your recommendation with reasoning, and wait for the user to decide before continuing. If a real decision is required and cannot be safely inferred, report what is blocked and ask the user to run a Refine pass.
+- **Do not make architectural or design decisions.** If a step is ambiguous during execution, **stop** — present concrete interpretations, give your recommendation with reasoning.
 - Do not add features, improvements, or refactors that are not in the plan.
 - Do not bypass safety checks or destructive operations without explicit confirmation in the plan.
 - Check off steps only after all verification passes, not during implementation.
@@ -152,16 +141,14 @@ Apply a narrow, well-scoped fix to an existing issue. No architectural decisions
 
 ### Steps
 1. Read the affected files to understand the current state.
-2. Identify the exact root cause of the issue described.
-3. Establish a confirming check - a failing test, a concrete reproduction step, or a specific error message that validates the issue.
-4. Apply the fix, scoped strictly to what was described.
-5. Run the confirming check to verify the fix resolves the issue.
-6. Report what was changed and why.
-7. Update `.agents/context/progress-tracker.md` and relevant feature plans when the fix resolves a tracked blocker.
+2. Identify the exact root cause of the issue described. Optionally, establish a confirming check including a failing test, a concrete reproduction step, or a specific error message if needed.
+3. Apply the fix, scoped strictly to what was described. Then, run any relevant verification steps to confirm the fix works and does not introduce new issues.
+4. Report what was changed and why.
+5. Update relevant feature plans when the fix resolves a tracked blocker.
 
 ### Rules
 - No refactoring beyond the fix.
-- **No design or architectural decisions.** If the fix requires a design decision or touches more than the stated scope, **stop** — present Option A and Option B with a recommendation and ask the user whether to proceed or escalate to a Plan.
+- **No design or architectural decisions.** If the fix requires a design decision or touches more than the stated scope, present a recommendation.
 
 ---
 
