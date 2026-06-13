@@ -95,7 +95,7 @@ Find weaknesses, gaps, and hidden assumptions in an existing plan before it reac
 4. **Present your analysis to the user.** Include:
    - Weaknesses and gaps found with suggested changes
    - Open questions that need user input (Suggestions are appreciated but optional)
-5. Only after receiving user answers, update the plan document with resolved decisions, revised steps, and any structural changes. Add a refinement round entry at the top of the plan documenting concerns raised and how they were resolved.
+5. After receiving user answers, update the plan document with resolved decisions, revised steps, and any structural changes. Add a refinement round entry at the top of the plan documenting concerns raised and how they were resolved.
 6. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
 
 ### Rules
@@ -121,7 +121,7 @@ Execute the approved plan faithfully. No design decisions, no scope additions.
 6. Update `.agents/context/progress-tracker.md`.
 
 ### Rules
-- **Do not make architectural or design decisions.** If a step is ambiguous during execution, **stop** — present concrete interpretations, give your recommendation with reasoning.
+- **Do not make architectural or design decisions.** If a step is ambiguous during execution, **stop** — present concrete interpretations, give your recommendation with reasoning, and ask the user to confirm before proceeding.
 - Do not add features, improvements, or refactors that are not in the plan.
 - Do not bypass safety checks or destructive operations without explicit confirmation in the plan.
 - Check off steps only after all verification passes, not during implementation.
@@ -148,7 +148,7 @@ Apply a narrow, well-scoped fix to an existing issue. No architectural decisions
 
 ### Rules
 - No refactoring beyond the fix.
-- **No design or architectural decisions.** If the fix requires a design decision or touches more than the stated scope, present a recommendation.
+- **No design or architectural decisions.** If the fix requires a design decision or touches more than the stated scope, present a recommendation and ask the user to confirm before proceeding.
 
 ---
 
