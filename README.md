@@ -131,6 +131,7 @@ Feature plans live in `.agents/feature/`; fix docs live in `.agents/fix/` and ar
 - **Fix never refactors beyond the stated issue.** If the scope is larger than expected, the agent stops and reports before continuing.
 - **All decisions are documented.** Every choice made during Plan is recorded under **Decisions Made** in the plan file — nothing is left implicit.
 - **Every plan and fix doc names its ticket.** Plans and fix docs reference each other by an internal `NNN` handle that means nothing outside `.agents/`, so each one records a `Ticket:` line pointing at the tracker item your team can actually open — or `none`, stated explicitly.
+- **Internal references stay internal.** Plan numbers and unopenable file paths never reach commits, PRs, code comments, or external docs — the agent translates a plan number to its ticket and drops paths the reader cannot open. Chat and `.agents/` files are exempt, since they depend on those references.
 - **Progress is tracked.** After each Implement session, `.agents/context/progress-tracker.md` is updated. Fixes are the exception — they stay lightweight and don't touch the tracker.
 
 ---

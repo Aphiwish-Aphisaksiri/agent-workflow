@@ -88,6 +88,30 @@ Fixes are lightweight: completed fixes do **not** update `.agents/context/progre
 
 ---
 
+## Output Hygiene — Internal References
+
+Internal workflow artifacts must not leak into anything other people see. This covers two kinds of internal reference: the plan/fix **numbering** and internal **file paths**. Both are meaningless — or unopenable — to anyone outside this repo's `.agents/` folder. Treat this as a strong default: binding, not advisory.
+
+**Externally-visible surfaces** (where these rules apply): git commit messages, PR titles and descriptions, code comments and docstrings, and external docs (Confluence, Notion, etc.).
+
+**Internal surfaces** (exempt — keep references as-is): files under `.agents/` and chat with the user. These *rely* on the numbering and paths for cross-referencing. Do not scrub them.
+
+### Plan/fix numbering
+
+- **Never emit a bare `NNN` plan/fix number to an externally-visible surface.** A reviewer reading "builds on 008" has no way to resolve it.
+- **Translate to the tracker ticket instead.** Every plan carries a `Ticket:` line — refer to the work by that identifier.
+- **If a plan has no ticket or the mapping is unclear, ask the user** before emitting. Do not silently fall back to a plain-language description; only describe the work in plain words once the user confirms there is no ticket.
+
+### Internal file paths
+
+- **Never cite a path the reader cannot open.** The test is whether the path is **committed and visible to the reader** — not merely whether it exists locally. Anything git-excluded or uncommitted fails this test: `.agents/**` when it is excluded, local scratch files, `.env`, and so on.
+- **If the content also lives in a committed artifact, cite that instead.** Pointing at real source paths is encouraged — reviewers want them.
+- **If there is no committed counterpart, drop the path entirely** and describe the substance on its own merits. Do not mention where the content is stored or edited. Still surface any real consequence the reader needs — for example a required deployment or coordination step must be described as an action, without naming the internal doc that tracks it.
+
+> **Note:** If a project deliberately commits `.agents/` so the team shares it, those paths are visible and may be cited. The rule keys on reader visibility, not on the folder name.
+
+---
+
 ## Phase 1 — Plan
 
 **Trigger:** `Plan: [goal]`

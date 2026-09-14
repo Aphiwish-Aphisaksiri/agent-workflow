@@ -51,6 +51,14 @@ runs the full Plan → Refine → Implement cycle. Common overrides:
 - Always run [build/lint/test command] as fix verification
 -->
 
+<!-- Output hygiene: `AGENTS.md > Output Hygiene — Internal References` already
+bans internal plan numbers and unopenable paths from commits, PRs, and external
+docs. Tighten it here if this project needs specifics, e.g.:
+- Name the tracker to translate plan numbers into (e.g. "always cite the Jira key")
+- Add project-specific surfaces that count as externally visible
+- Note if `.agents/` is committed here, making those paths citable
+-->
+
 
 ---
 
