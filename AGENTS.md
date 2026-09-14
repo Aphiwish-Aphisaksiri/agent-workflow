@@ -59,6 +59,8 @@ NNNb-[feature-name].md       → split plan, part B        e.g. 002b-api-layer.m
 
 Use the next available three-digit number. Do not reuse or skip numbers.
 
+The `NNN` number is an **internal handle** — it is meaningless outside `.agents/`. Every plan therefore carries a `Ticket:` line recording the associated tracker item (Jira, GitHub issue, Linear, board card, or `none`), which is the identifier the rest of the team can actually open.
+
 > **Reference example:** `.agents/feature/NNN-example.md` contains a fully annotated example plan with every field filled in. It is required reading for the Plan and Refine phases.
 
 ---
@@ -96,7 +98,7 @@ Translate a high-level goal into a complete, unambiguous plan document that can 
 ### Steps
 1. Read `.agents/feature/NNN-example.md` for the plan structure and conventions.
 2. Analyze the goal and identify missing information, ambiguous requirements, and decisions that must be made before a solid plan can be written.
-3. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds.
+3. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds. Include the **tracker ticket** in this batch if the user has not already supplied one.
 4. Write the plan following the structure defined in `NNN-example.md`. Use `.agents/feature/NNN-[feature-name].md` for features, or `.agents/fix/NNN-[fix-name].md` for standalone fixes (see **Fix Documents**).
 5. Summarize the plan and list any items left as open questions.
 
@@ -104,6 +106,7 @@ Translate a high-level goal into a complete, unambiguous plan document that can 
 - Do not write any code or make file changes during this phase.
 - Never leave a decision implicit — if you make a call, record it under **Decisions Made**.
 - A plan is ready for Implement only when **Open Questions** is empty.
+- **Always fill in the `Ticket:` line.** Ask the user for it if it is not obvious. Never invent a ticket ID — if the work has no ticket, record `none` explicitly so the absence is deliberate.
 
 ---
 

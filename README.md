@@ -130,6 +130,7 @@ Feature plans live in `.agents/feature/`; fix docs live in `.agents/fix/` and ar
 - **Implement never makes design decisions.** If a decision is required and cannot be safely inferred, the agent stops and asks the user to run a Refine pass.
 - **Fix never refactors beyond the stated issue.** If the scope is larger than expected, the agent stops and reports before continuing.
 - **All decisions are documented.** Every choice made during Plan is recorded under **Decisions Made** in the plan file — nothing is left implicit.
+- **Every plan names its ticket.** Plans reference each other by an internal `NNN` handle that means nothing outside `.agents/`, so each one records a `Ticket:` line pointing at the tracker item your team can actually open — or `none`, stated explicitly.
 - **Progress is tracked.** After each Implement session, `.agents/context/progress-tracker.md` is updated. Fixes are the exception — they stay lightweight and don't touch the tracker.
 
 ---

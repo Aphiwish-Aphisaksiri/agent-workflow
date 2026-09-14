@@ -2,6 +2,8 @@
 
 Status: Ready
 
+Ticket: none — ships with the workflow template itself
+
 ## Goal
 
 Provide a reusable, step-by-step blueprint that any agent can follow to fully populate the `.agents/context/` files, `.agents/docs/README.md`, and `AGENTS.md` for a new project by interviewing the user with targeted, per-field questions and writing the files once all answers are collected.
@@ -133,7 +135,7 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 38. Where does the code live and how should agents interact with it? *(e.g., GitHub via the `gh` CLI, GitLab via `glab`, or an MCP server)*
 39. What CI system is in use, and how should an agent check build status or read job logs? *(include the pipeline/project identifier and whether the access token can trigger builds or is read-only)*
 40. Is there a code-quality or static-analysis service? *(host, project key — note any case sensitivity — and what the quality gate actually measures)*
-41. What issue tracker or knowledge base should agents read? *(e.g., Jira/Confluence via MCP, Linear, GitHub Issues)* — And may the agent **write** to it, or is it read-only unless explicitly asked?
+41. What issue tracker or knowledge base should agents read? *(e.g., Jira/Confluence via MCP, Linear, GitHub Issues)* — And may the agent **write** to it, or is it read-only unless explicitly asked? Also note the **ticket ID format** *(e.g. `PROJ-123`, `GH #45`)*, since every plan records one on its `Ticket:` line.
 42. Where do credentials live, and how are they read? *(e.g., OS keychain entry names, secrets manager, environment variables — names and purposes only, never values)*
 43. Are there existing shell helpers, aliases, or scripts that wrap these tools? — If yes, list their signatures.
 44. Which MCP servers are expected to be enabled, and are any deliberately disabled? *(state the reason, so agents stop trying to use them)*
