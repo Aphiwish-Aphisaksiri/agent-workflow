@@ -2,6 +2,10 @@
 
 > **Living document** — Update this file at the end of every Implement phase.
 > Agents: read this file to understand where the project stands before starting any phase.
+>
+> **Scope:** feature plans from `.agents/feature/` only. Fix docs from
+> `.agents/fix/` are deliberately **not** tracked here — they stay lightweight
+> and are self-documenting in their own file.
 
 ---
 
@@ -27,7 +31,8 @@ Add entries as they are made. Example:
 
 ## Feature Progress
 
-<!-- Check off features as they are fully implemented. Link to the plan file. -->
+<!-- Check off features as they are fully implemented. Link to the plan file.
+Features only — do not add fix docs from `.agents/fix/` here. -->
 
 - [ ] [`000-populate-workflow-files`](./../feature/000-populate-workflow-files.md) — Agent workflow blueprint
 

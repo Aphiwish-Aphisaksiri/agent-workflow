@@ -1,5 +1,9 @@
 # Feature NNN: Example Feature
 
+<!-- Fix docs in `.agents/fix/` use this same structure — title them
+`# Fix NNN: [Short description]` and add a **Root Cause** section under Goal.
+Sections that don't apply to a small fix may be omitted. -->
+
 Status: Draft / Refined / Ready / Completed
 
 > **Refinement round 1 Completed 2026-01-01** Resolution applied:

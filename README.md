@@ -12,8 +12,8 @@ The agent detects the phase and follows the corresponding instructions from `AGE
 |---|---|---|
 | `Plan: [goal]` | **Plan** | Translates a goal into a complete, unambiguous feature plan |
 | `Refine: [plan]` | **Refine** | Stress-tests an existing plan, fills gaps, resolves open questions |
-| `Implement: [plan]` | **Implement** | Executes the approved plan — no new decisions |
-| `Fix: [issue]` | **Fix** | Applies a narrow, targeted fix without scope creep |
+| `Implement: [plan]` | **Implement** | Executes the approved plan or fix doc — no new decisions |
+| `Fix: [issue]` | **Fix** | Documents and applies a narrow, targeted fix without scope creep |
 | `Meta: [goal]` | **Meta** | Improves the workflow system itself |
 
 ---
@@ -37,6 +37,8 @@ README.md                        ← This file
   feature/
     NNN-example.md               ← Annotated example plan (required reading for Plan/Refine)
     NNN-[feature-name].md        ← Feature plans (numbered sequentially)
+  fix/
+    NNN-[fix-name].md            ← Fix docs (numbered independently from features)
 ```
 
 ---
@@ -111,10 +113,14 @@ Plan ──→ Refine ──→ Implement
                        │
                        └──→ Fix (for defects found during implementation)
 
+Fix ───→ Refine ──→ Implement   (standalone fixes follow the same cycle)
+
 Meta (anytime, for improving the workflow itself)
 ```
 
 A plan must have an empty **Open Questions** section before it can be handed to Implement. The Refine phase exists specifically to get it there.
+
+Feature plans live in `.agents/feature/`; fix docs live in `.agents/fix/` and are numbered independently. Both use the same document structure and the same lifecycle. A defect found *during* Implement is instead recorded inline in the active feature plan, so the fix stays attached to the work that surfaced it.
 
 ---
 
@@ -123,7 +129,7 @@ A plan must have an empty **Open Questions** section before it can be handed to 
 - **Implement never makes design decisions.** If a decision is required and cannot be safely inferred, the agent stops and asks the user to run a Refine pass.
 - **Fix never refactors beyond the stated issue.** If the scope is larger than expected, the agent stops and reports before continuing.
 - **All decisions are documented.** Every choice made during Plan is recorded under **Decisions Made** in the plan file — nothing is left implicit.
-- **Progress is tracked.** After each Implement session, `.agents/context/progress-tracker.md` is updated.
+- **Progress is tracked.** After each Implement session, `.agents/context/progress-tracker.md` is updated. Fixes are the exception — they stay lightweight and don't touch the tracker.
 
 ---
 

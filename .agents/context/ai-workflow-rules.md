@@ -45,6 +45,13 @@
 
 <!-- Any phase-specific overrides. E.g., "skip Refine for small UI tweaks", "always ask before touching shared components" -->
 
+<!-- Fixes: by default a standalone fix gets its own doc in `.agents/fix/` and
+runs the full Plan → Refine → Implement cycle. Common overrides:
+- Skip Refine for fixes under N lines of change
+- Always run [build/lint/test command] as fix verification
+-->
+
+
 ---
 
 ## Notes
