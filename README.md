@@ -30,6 +30,7 @@ README.md                        ← This file
     architecture.md              ← Tech stack, structure, data flow
     code-standards.md            ← Naming conventions, file organization, testing
     ui-context.md                ← Component library, theme, layout patterns
+    tools.md                     ← External tools & services, credentials policy
     progress-tracker.md          ← Current phase, feature checklist, blockers
   docs/
     README.md                    ← Index of reference docs (API specs, research, etc.)

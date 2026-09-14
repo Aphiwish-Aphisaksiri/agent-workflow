@@ -29,6 +29,7 @@ The agent workflow system relies on several context files that agents read at th
 - `.agents/context/architecture.md` — stack, structure, request flow, patterns
 - `.agents/context/code-standards.md` — naming, organization, testing, tooling
 - `.agents/context/ui-context.md` — component library, CSS approach, theme, layout patterns
+- `.agents/context/tools.md` — external tools & services, access methods, credentials policy
 - `.agents/context/progress-tracker.md` — current phase, checklist, blockers, next steps
 - `.agents/docs/README.md` — reference document index
 
@@ -127,24 +128,37 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 
 ---
 
+#### `tools.md`
+
+38. Where does the code live and how should agents interact with it? *(e.g., GitHub via the `gh` CLI, GitLab via `glab`, or an MCP server)*
+39. What CI system is in use, and how should an agent check build status or read job logs? *(include the pipeline/project identifier and whether the access token can trigger builds or is read-only)*
+40. Is there a code-quality or static-analysis service? *(host, project key — note any case sensitivity — and what the quality gate actually measures)*
+41. What issue tracker or knowledge base should agents read? *(e.g., Jira/Confluence via MCP, Linear, GitHub Issues)* — And may the agent **write** to it, or is it read-only unless explicitly asked?
+42. Where do credentials live, and how are they read? *(e.g., OS keychain entry names, secrets manager, environment variables — names and purposes only, never values)*
+43. Are there existing shell helpers, aliases, or scripts that wrap these tools? — If yes, list their signatures.
+44. Which MCP servers are expected to be enabled, and are any deliberately disabled? *(state the reason, so agents stop trying to use them)*
+45. What identifiers differ from sibling repos that share these credentials? *(project keys, pipeline slugs, base branches — a frequent source of confusing 404s)*
+
+---
+
 #### `progress-tracker.md`
 
-38. What is the current phase of the project? *(planning, early development, in-progress, maintenance)*
-39. What is the initial feature or task checklist? *(list the features to be built)*
-40. Are there any known blockers right now?
-41. What are the immediate next steps?
+46. What is the current phase of the project? *(planning, early development, in-progress, maintenance)*
+47. What is the initial feature or task checklist? *(list the features to be built)*
+48. Are there any known blockers right now?
+49. What are the immediate next steps?
 
 ---
 
 #### `.agents/docs/README.md`
 
-42. Are there any reference documents to add to the index? *(API specs, design docs, research notes, external references)* — If yes, provide a filename and one-line description for each.
+50. Are there any reference documents to add to the index? *(API specs, design docs, research notes, external references)* — If yes, provide a filename and one-line description for each.
 
 ---
 
 #### Local Environment *(Required — always ask)*
 
-43. **This question cannot be skipped.** Would you like to add `AGENTS.md` (or its platform equivalent) and `.agents/` to `.git/info/exclude`? This keeps agent workflow files local to your machine — they won't appear in diffs, PRs, or be pushed to remote. Say **no** if you want the team to share these files as a checked-in convention.
+51. **This question cannot be skipped.** Would you like to add `AGENTS.md` (or its platform equivalent) and `.agents/` to `.git/info/exclude`? This keeps agent workflow files local to your machine — they won't appear in diffs, PRs, or be pushed to remote. Say **no** if you want the team to share these files as a checked-in convention.
 
 ### Phase C: Process Answers
 
@@ -162,6 +176,7 @@ Ask **all questions below in a single batch**. Group them clearly by file so the
 - [ ] Write `.agents/context/architecture.md`
 - [ ] Write `.agents/context/code-standards.md`
 - [ ] Write `.agents/context/ui-context.md`
+- [ ] Write `.agents/context/tools.md` — **never record a secret value, only where it lives**
 - [ ] Write `.agents/context/progress-tracker.md`
 - [ ] Update `.agents/docs/README.md` index
 - [ ] Update `AGENTS.md` only if the user specified overrides in questions 1–2

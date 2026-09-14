@@ -27,12 +27,15 @@ If no phase keyword is detected, infer the phase from context and instructions. 
 
 Then, read any other context files relevant to the current task. Do not assume their current state.
 
+**Before any interaction with an external tool or service — source control host, CI, code quality, issue tracker, or an MCP server — read `.agents/context/tools.md` first.** It records the verified identifiers, access methods, and gotchas. Do not guess a project key, pipeline slug, or branch name, and do not fall back to a different tool than the one specified.
+
 | File | Contents |
 |---|---|
 | `.agents/context/project-context.md` | Project name, description, users, key workflows, setup |
 | `.agents/context/architecture.md` | Tech stack, project structure, page architecture, data flow |
 | `.agents/context/code-standards.md` | File organization, naming conventions, coding patterns, testing |
 | `.agents/context/ui-context.md` | Component library, theme, color scheme, layout and behavior patterns |
+| `.agents/context/tools.md` | External tools & services: access methods, credentials policy, gotchas |
 | `.agents/context/progress-tracker.md` | Current phase, feature checklist, project decisions, blockers — features only, not fixes |
 
 ---
