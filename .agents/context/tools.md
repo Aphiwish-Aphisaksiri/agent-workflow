@@ -106,9 +106,9 @@ and purposes only, never values. Example:
 - **Never `echo` a token.** Pipe it straight into the consuming command.
   Terminal scrollback is captured in session logs.
 - **Never write an "is it set?" probe that can fall through to the value.** In
-  a POSIX shell, `${tok:+yes}${tok:-NO}` prints the **token** when it is set,
-  because `:-` only substitutes when the variable is *empty*. Use
-  `[[ -n "$tok" ]] && echo yes || echo NO`.
+  a POSIX shell, `${tok:+yes}${tok:-NO}` can expand to the **token** when it is set,
+  because `:-` only substitutes when the variable is *unset or empty*. Use
+  `[ -n "$tok" ] && echo yes || echo NO`.
 - **Redaction patterns must cover the shape of your secrets.** A mask keyed on
   long unbroken alphanumeric runs silently misses hyphenated secrets such as
   UUIDs, because no single run is long enough. Safer still: print `file:line`
