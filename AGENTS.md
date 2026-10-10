@@ -13,8 +13,8 @@ Detect the active phase from the user prompt, then follow the corresponding inst
 |---|---|---|
 | `Plan: [goal]` | **Plan** | Translate a goal into a structured feature plan |
 | `Refine: [feature or plan file]` | **Refine** | Stress-test and strengthen an existing plan |
-| `Implement: [feature or plan file]` | **Implement** | Execute an approved plan — no new decisions |
-| `Fix: [what to fix]` | **Fix** | Apply a targeted fix — visual, behavioral, or code quality |
+| `Implement: [feature or plan file]` | **Implement** | Execute an approved plan or fix doc — no new decisions |
+| `Fix: [what to fix]` | **Fix** | Document and apply a targeted fix — standalone in `.agents/fix/`, or inline in a feature plan when escalated from Implement |
 | `Meta: [goal]` | **Meta** | Improve this workflow system itself |
 
 If no phase keyword is detected, infer the phase from context and instructions. When in doubt, ask the user for clarification.
@@ -27,13 +27,16 @@ If no phase keyword is detected, infer the phase from context and instructions. 
 
 Then, read any other context files relevant to the current task. Do not assume their current state.
 
+**Before any interaction with an external tool or service — source control host, CI, code quality, issue tracker, or an MCP server — read `.agents/context/tools.md` first.** It records the verified identifiers, access methods, and gotchas. Do not guess a project key, pipeline slug, or branch name, and do not fall back to a different tool than the one specified.
+
 | File | Contents |
 |---|---|
 | `.agents/context/project-context.md` | Project name, description, users, key workflows, setup |
 | `.agents/context/architecture.md` | Tech stack, project structure, page architecture, data flow |
 | `.agents/context/code-standards.md` | File organization, naming conventions, coding patterns, testing |
 | `.agents/context/ui-context.md` | Component library, theme, color scheme, layout and behavior patterns |
-| `.agents/context/progress-tracker.md` | Current phase, feature checklist, project decisions, blockers |
+| `.agents/context/tools.md` | External tools & services: access methods, credentials policy, gotchas |
+| `.agents/context/progress-tracker.md` | Current phase, feature checklist, project decisions, blockers — features only, not fixes |
 
 ---
 
@@ -56,7 +59,56 @@ NNNb-[feature-name].md       → split plan, part B        e.g. 002b-api-layer.m
 
 Use the next available three-digit number. Do not reuse or skip numbers.
 
+The `NNN` number is an **internal handle** — it is meaningless outside `.agents/`. Every plan and fix doc therefore carries a `Ticket:` line recording the associated tracker item (Jira, GitHub issue, Linear, board card, or `none`), which is the identifier the rest of the team can actually open.
+
 > **Reference example:** `.agents/feature/NNN-example.md` contains a fully annotated example plan with every field filled in. It is required reading for the Plan and Refine phases.
+
+---
+
+## Fix Documents
+
+Fix documents track small, targeted fixes that are often unrelated to a main feature.
+They live in `.agents/fix/` and use the same naming convention and structure as feature plans:
+
+```
+NNN-[fix-name].md        → single-file fix doc       e.g. 001-login-redirect-loop.md
+NNNa-[fix-name].md       → split fix doc, part A
+NNNb-[fix-name].md       → split fix doc, part B
+```
+
+Use the next available three-digit number within `.agents/fix/`. Numbering is independent from `.agents/feature/`. Do not reuse or skip numbers.
+
+Fix documents follow the same structure as feature plans (see `.agents/feature/NNN-example.md`) and move through the same Plan → Refine → Implement lifecycle. The `Plan`, `Refine`, and `Implement` phases all accept fix files in `.agents/fix/` in addition to feature files in `.agents/feature/`.
+
+**Standalone vs. escalated:**
+- **Standalone fix** — A fix requested on its own (via `Fix:` or `Plan:`) is documented as a new fix doc in `.agents/fix/`.
+- **Escalated fix** — A defect discovered mid-Implement that must be resolved to continue is documented **inline in the active feature plan** (not as a separate fix doc), then implementation resumes.
+
+Fixes are lightweight: completed fixes do **not** update `.agents/context/progress-tracker.md`.
+
+---
+
+## Output Hygiene — Internal References
+
+Internal workflow artifacts must not leak into anything other people see. This covers two kinds of internal reference: the plan/fix **numbering** and internal **file paths**. Both are meaningless — or unopenable — to anyone outside this repo's `.agents/` folder. Treat this as a strong default: binding, not advisory.
+
+**Externally-visible surfaces** (where these rules apply): git commit messages, PR titles and descriptions, code comments and docstrings, and external docs (Confluence, Notion, etc.).
+
+**Internal surfaces** (exempt — keep references as-is): files under `.agents/` and chat with the user. These *rely* on the numbering and paths for cross-referencing. Do not scrub them.
+
+### Plan/fix numbering
+
+- **Never emit a bare `NNN` plan/fix number to an externally-visible surface.** A reviewer reading "builds on 008" has no way to resolve it.
+- **Translate to the tracker ticket instead.** Every plan carries a `Ticket:` line — refer to the work by that identifier.
+- **If a plan has no ticket or the mapping is unclear, ask the user** before emitting. Do not silently fall back to a plain-language description; only describe the work in plain words once the user confirms there is no ticket.
+
+### Internal file paths
+
+- **Never cite a path the reader cannot open.** The test is whether the path is **committed and visible to the reader** — not merely whether it exists locally. Anything git-excluded or uncommitted fails this test: `.agents/**` when it is excluded, local scratch files, `.env`, and so on.
+- **If the content also lives in a committed artifact, cite that instead.** Pointing at real source paths is encouraged — reviewers want them.
+- **If there is no committed counterpart, drop the path entirely** and describe the substance on its own merits. Do not mention where the content is stored or edited. Still surface any real consequence the reader needs — for example a required deployment or coordination step must be described as an action, without naming the internal doc that tracks it.
+
+> **Note:** If a project deliberately commits `.agents/` so the team shares it, those paths are visible and may be cited. The rule keys on reader visibility, not on the folder name.
 
 ---
 
@@ -70,14 +122,15 @@ Translate a high-level goal into a complete, unambiguous plan document that can 
 ### Steps
 1. Read `.agents/feature/NNN-example.md` for the plan structure and conventions.
 2. Analyze the goal and identify missing information, ambiguous requirements, and decisions that must be made before a solid plan can be written.
-3. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds.
-4. Write the plan to `.agents/feature/NNN-[feature-name].md` following the structure defined in `NNN-example.md`.
+3. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds. Include the **tracker ticket** in this batch if the user has not already supplied one.
+4. Write the plan following the structure defined in `NNN-example.md`. Use `.agents/feature/NNN-[feature-name].md` for features, or `.agents/fix/NNN-[fix-name].md` for standalone fixes (see **Fix Documents**).
 5. Summarize the plan and list any items left as open questions.
 
 ### Rules
 - Do not write any code or make file changes during this phase.
 - Never leave a decision implicit — if you make a call, record it under **Decisions Made**.
 - A plan is ready for Implement only when **Open Questions** is empty.
+- **Always fill in the `Ticket:` line.** Ask the user for it if it is not obvious. Never invent a ticket ID — if the work has no ticket, record `none` explicitly so the absence is deliberate.
 
 ---
 
@@ -90,7 +143,7 @@ Find weaknesses, gaps, and hidden assumptions in an existing plan before it reac
 
 ### Steps
 1. Read `.agents/feature/NNN-example.md` to confirm expected plan structure and conventions.
-2. Read the target plan from `.agents/feature/`.
+2. Read the target plan from `.agents/feature/` (feature plans) or `.agents/fix/` (fix docs).
 3. Systematically evaluate the plan.
 4. **Present your analysis to the user.** Include:
    - Weaknesses and gaps found with suggested changes
@@ -113,12 +166,12 @@ Find weaknesses, gaps, and hidden assumptions in an existing plan before it reac
 Execute the approved plan faithfully. No design decisions, no scope additions.
 
 ### Steps
-1. Read the target plan from `.agents/feature/`. Verify **Open Questions** is empty. If not, stop and ask the user to run a Refine pass first.
+1. Read the target plan from `.agents/feature/` (feature plans) or `.agents/fix/` (fix docs). Verify **Open Questions** is empty. If not, stop and ask the user to run a Refine pass first.
 2. Execute all implementation steps in the plan in order.
 3. Run the **Verification** steps from the plan — build, lint, type-check, tests, integration / smoke-test, and regression as applicable. If any check fails, fix the issue before proceeding.
-4. Update the feature plan file — Check off all completed steps (`- [x]`). Only do this after all verification passes.
+4. Update the plan file — Check off all completed steps (`- [x]`). Only do this after all verification passes.
 5. Report a summary of what was done.
-6. Update `.agents/context/progress-tracker.md`.
+6. Update `.agents/context/progress-tracker.md`. **Exception:** skip this step when implementing a fix doc from `.agents/fix/` — fixes are lightweight and do not update the progress tracker.
 
 ### Rules
 - **Do not make architectural or design decisions.** If a step is ambiguous during execution, **stop** — present concrete interpretations, give your recommendation with reasoning, and ask the user to confirm before proceeding.
@@ -132,23 +185,26 @@ Execute the approved plan faithfully. No design decisions, no scope additions.
 
 **Trigger:** `Fix: [what to fix]`
 
-This phase can be used in two ways:
-- **Standalone** — Start a new session with `Fix:` to apply a targeted fix without a full Plan → Refine → Implement cycle.
-- **Escalated from Implement** — If an Implement step surfaces a small defect that must be resolved to continue, the agent may enter Fix mode for that specific issue, then return to Implement.
+This phase can be used in two ways, and **where the fix is documented depends on which**:
+- **Standalone** — A fix requested on its own. Document it as a new fix doc in `.agents/fix/NNN-[fix-name].md` (see **Fix Documents**), then move it through the same Plan → Refine → Implement lifecycle as a feature. Small, unambiguous fixes may be planned and implemented in a single pass.
+- **Escalated from Implement** — If an Implement step surfaces a small defect that must be resolved to continue, document it **inline in the active feature plan** (not as a separate fix doc), apply the fix, then return to Implement.
 
 ### Objective
-Apply a narrow, well-scoped fix to an existing issue. No architectural decisions, no new features, no refactoring beyond what is required to resolve the stated problem.
+Apply a narrow, well-scoped fix to an existing issue, with a lightweight record of what was done. No architectural decisions, no new features, no refactoring beyond what is required to resolve the stated problem.
 
 ### Steps
-1. Read the affected files to understand the current state.
-2. Identify the exact root cause of the issue described. Optionally, establish a confirming check including a failing test, a concrete reproduction step, or a specific error message if needed.
-3. Apply the fix, scoped strictly to what was described. Then, run any relevant verification steps to confirm the fix works and does not introduce new issues.
-4. Report what was changed and why.
-5. Update relevant feature plans when the fix resolves a tracked blocker.
+1. Determine whether the fix is **standalone** or **escalated**, and pick the documentation target accordingly (fix doc in `.agents/fix/` vs. inline in the active feature plan).
+2. Read the affected files to understand the current state.
+3. Identify the exact root cause of the issue described. Optionally, establish a confirming check including a failing test, a concrete reproduction step, or a specific error message if needed.
+4. Record the fix in the chosen document — scope, root cause, and the steps to apply it — following the structure in `.agents/feature/NNN-example.md`.
+5. Apply the fix, scoped strictly to what was described. Then, run any relevant verification steps to confirm the fix works and does not introduce new issues.
+6. Report what was changed and why. Fixes do **not** update `.agents/context/progress-tracker.md`.
 
 ### Rules
 - No refactoring beyond the fix.
 - **No design or architectural decisions.** If the fix requires a design decision or touches more than the stated scope, present a recommendation and ask the user to confirm before proceeding.
+- Standalone fixes are documented in `.agents/fix/`; escalated fixes are documented inline in the feature plan that triggered them.
+- Update relevant feature plans when the fix resolves a tracked blocker.
 
 ---
 

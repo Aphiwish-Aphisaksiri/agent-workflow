@@ -1,6 +1,17 @@
 # Feature NNN: Example Feature
 
+<!-- Fix docs in `.agents/fix/` use this same structure — title them
+`# Fix NNN: [Short description]` and add a **Root Cause** section under Goal.
+Sections that don't apply to a small fix may be omitted. -->
+
 Status: Draft / Refined / Ready / Completed
+
+Ticket: [Tracker ID or link — e.g. `PROJ-123`, `GH #45`, or `none`]
+
+<!-- The bridge between this plan's internal `NNN` handle and the identifier your
+team can actually open. Use whatever tracker the project uses (Jira, GitHub
+issue, Linear, a board card link). Write `none` explicitly when the work has no
+ticket, so its absence is intentional rather than forgotten. -->
 
 > **Refinement round 1 Completed 2026-01-01** Resolution applied:
 > - Concern #1: [Description of concern] — [How it was resolved]
