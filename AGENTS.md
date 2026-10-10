@@ -59,7 +59,7 @@ NNNb-[feature-name].md       → split plan, part B        e.g. 002b-api-layer.m
 
 Use the next available three-digit number. Do not reuse or skip numbers.
 
-The `NNN` number is an **internal handle** — it is meaningless outside `.agents/`. Every plan therefore carries a `Ticket:` line recording the associated tracker item (Jira, GitHub issue, Linear, board card, or `none`), which is the identifier the rest of the team can actually open.
+The `NNN` number is an **internal handle** — it is meaningless outside `.agents/`. Every plan and fix doc therefore carries a `Ticket:` line recording the associated tracker item (Jira, GitHub issue, Linear, board card, or `none`), which is the identifier the rest of the team can actually open.
 
 > **Reference example:** `.agents/feature/NNN-example.md` contains a fully annotated example plan with every field filled in. It is required reading for the Plan and Refine phases.
 

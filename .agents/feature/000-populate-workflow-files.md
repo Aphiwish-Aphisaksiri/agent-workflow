@@ -2,7 +2,7 @@
 
 Status: Ready
 
-Ticket: none — ships with the workflow template itself
+Ticket: none
 
 ## Goal
 
