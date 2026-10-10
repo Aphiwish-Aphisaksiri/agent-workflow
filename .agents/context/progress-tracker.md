@@ -1,6 +1,6 @@
 # Progress Tracker
 
-> **Living document** — Update this file at the end of every Implement phase.
+> **Living document** — Update this file at the end of every Implement phase for feature plans in `.agents/feature/`.
 > Agents: read this file to understand where the project stands before starting any phase.
 >
 > **Scope:** feature plans from `.agents/feature/` only. Fix docs from
