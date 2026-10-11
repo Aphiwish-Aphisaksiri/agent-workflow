@@ -4,8 +4,6 @@ This file defines the shared conventions and phase routing for AI agents on this
 When a phase is active, agents load the corresponding phase file from `.agents/phases/`.
 When no phase is active, agents respond naturally using codebase knowledge and context files.
 
-> **Adaptation note:** This file may be renamed to `.cursorrules`, `.github/copilot-instructions.md`, or the equivalent for your agent platform. The content and conventions remain the same.
-
 ---
 
 ## Phase Detection
