@@ -1,7 +1,8 @@
 # Agent Workflow
 
-This file defines the phase-driven workflow for AI agents on this project.
-Detect the active phase from the user prompt, then follow the corresponding instructions below.
+This file defines the shared conventions and phase routing for AI agents on this project.
+When a phase is active, agents load the corresponding phase file from `.agents/phases/`.
+When no phase is active, agents respond naturally using codebase knowledge and context files.
 
 > **Adaptation note:** This file may be renamed to `.cursorrules`, `.github/copilot-instructions.md`, or the equivalent for your agent platform. The content and conventions remain the same.
 
@@ -9,15 +10,23 @@ Detect the active phase from the user prompt, then follow the corresponding inst
 
 ## Phase Detection
 
-| Prompt prefix | Phase | Purpose |
-|---|---|---|
-| `Plan: [goal]` | **Plan** | Translate a goal into a structured feature plan |
-| `Refine: [feature or plan file]` | **Refine** | Stress-test and strengthen an existing plan |
-| `Implement: [feature or plan file]` | **Implement** | Execute an approved plan or fix doc — no new decisions |
-| `Fix: [what to fix]` | **Fix** | Document and apply a targeted fix — standalone in `.agents/fix/`, or inline in a feature plan when escalated from Implement |
-| `Meta: [goal]` | **Meta** | Improve this workflow system itself |
+| Prompt prefix | Phase | Instruction file | Purpose |
+|---|---|---|---|
+| `Plan: [goal]` | **Plan** | `.agents/phases/plan.md` | Translate a goal into a structured feature plan |
+| `Refine: [feature or plan file]` | **Refine** | `.agents/phases/refine.md` | Stress-test and strengthen an existing plan |
+| `Implement: [feature or plan file]` | **Implement** | `.agents/phases/implement.md` | Execute an approved plan or fix doc — no new decisions |
+| `Fix: [what to fix]` | **Fix** | `.agents/phases/fix.md` | Document and apply a targeted fix — standalone in `.agents/fix/`, or inline in a feature plan when escalated from Implement |
+| `Meta: [goal]` | **Meta** | `.agents/phases/meta.md` | Improve this workflow system itself |
 
-If no phase keyword is detected, infer the phase from context and instructions. When in doubt, ask the user for clarification.
+> **Mandatory:** When a phase is triggered, **read the instruction file first before taking any action or planning steps.** Do not proceed from memory or guess the phase rules.
+
+### No phase detected
+
+If no phase keyword is present and the intent does not clearly map to a phase above, **do not force phase detection.** Instead:
+
+- Respond naturally — no phase rules apply.
+- Use context files and codebase knowledge as usual to give informed answers.
+- If the conversation surfaces something actionable (a bug, a feature idea, a decision), *suggest* escalating to the appropriate phase — but do not force it or ask unprompted "which phase should we use?"
 
 ---
 
@@ -109,126 +118,3 @@ Internal workflow artifacts must not leak into anything other people see. This c
 - **If there is no committed counterpart, drop the path entirely** and describe the substance on its own merits. Do not mention where the content is stored or edited. Still surface any real consequence the reader needs — for example a required deployment or coordination step must be described as an action, without naming the internal doc that tracks it.
 
 > **Note:** If a project deliberately commits `.agents/` so the team shares it, those paths are visible and may be cited. The rule keys on reader visibility, not on the folder name.
-
----
-
-## Phase 1 — Plan
-
-**Trigger:** `Plan: [goal]`
-
-### Objective
-Translate a high-level goal into a complete, unambiguous plan document that can be handed to Implement without further design decisions.
-
-### Steps
-1. Read `.agents/feature/NNN-example.md` for the plan structure and conventions.
-2. Analyze the goal and identify missing information, ambiguous requirements, and decisions that must be made before a solid plan can be written.
-3. **If gaps exist:** Consolidate all questions into a single response and ask the user. Wait for answers before writing the plan. Ask follow-ups only if the user's answers introduce new gaps — not as routine rounds. Include the **tracker ticket** in this batch if the user has not already supplied one.
-4. Write the plan following the structure defined in `NNN-example.md`. Use `.agents/feature/NNN-[feature-name].md` for features, or `.agents/fix/NNN-[fix-name].md` for standalone fixes (see **Fix Documents**).
-5. Summarize the plan and list any items left as open questions.
-
-### Rules
-- Do not write any code or make file changes during this phase.
-- Never leave a decision implicit — if you make a call, record it under **Decisions Made**.
-- A plan is ready for Implement only when **Open Questions** is empty.
-- **Always fill in the `Ticket:` line.** Ask the user for it if it is not obvious. Never invent a ticket ID — if the work has no ticket, record `none` explicitly so the absence is deliberate.
-
----
-
-## Phase 2 — Refine
-
-**Trigger:** `Refine: [feature name, plan file, or description]`
-
-### Objective
-Find weaknesses, gaps, and hidden assumptions in an existing plan before it reaches implementation.
-
-### Steps
-1. Read `.agents/feature/NNN-example.md` to confirm expected plan structure and conventions.
-2. Read the target plan from `.agents/feature/` (feature plans) or `.agents/fix/` (fix docs).
-3. Systematically evaluate the plan.
-4. **Present your analysis to the user.** Include:
-   - Weaknesses and gaps found with suggested changes
-   - Open questions that need user input (Suggestions are appreciated but optional)
-5. After receiving user answers, update the plan document with resolved decisions, revised steps, and any structural changes. Add a refinement round entry at the top of the plan documenting concerns raised and how they were resolved.
-6. Remove resolved items from **Open Questions**. The plan is Refine-complete when **Open Questions** is empty.
-
-### Rules
-- Do not implement anything during this phase.
-- Be specific about weaknesses — "step 3 is ambiguous because X" not "step 3 needs more detail".
-- If the plan requires major restructuring, describe the proposed changes and confirm with the user before rewriting.
-
----
-
-## Phase 3 — Implement
-
-**Trigger:** `Implement: [feature name, plan file, or description]`
-
-### Objective
-Execute the approved plan faithfully. No design decisions, no scope additions.
-
-### Steps
-1. Read the target plan from `.agents/feature/` (feature plans) or `.agents/fix/` (fix docs). Verify **Open Questions** is empty. If not, stop and ask the user to run a Refine pass first.
-2. Execute all implementation steps in the plan in order.
-3. Run the **Verification** steps from the plan — build, lint, type-check, tests, integration / smoke-test, and regression as applicable. If any check fails, fix the issue before proceeding.
-4. Update the plan file — Check off all completed steps (`- [x]`). Only do this after all verification passes.
-5. Report a summary of what was done.
-6. Update `.agents/context/progress-tracker.md`. **Exception:** skip this step when implementing a fix doc from `.agents/fix/` — fixes are lightweight and do not update the progress tracker.
-
-### Rules
-- **Do not make architectural or design decisions.** If a step is ambiguous during execution, **stop** — present concrete interpretations, give your recommendation with reasoning, and ask the user to confirm before proceeding.
-- Do not add features, improvements, or refactors that are not in the plan.
-- Do not bypass safety checks or destructive operations without explicit confirmation in the plan.
-- Check off steps only after all verification passes, not during implementation.
-
----
-
-## Phase 4 — Fix
-
-**Trigger:** `Fix: [what to fix]`
-
-This phase can be used in two ways, and **where the fix is documented depends on which**:
-- **Standalone** — A fix requested on its own. Document it as a new fix doc in `.agents/fix/NNN-[fix-name].md` (see **Fix Documents**), then move it through the same Plan → Refine → Implement lifecycle as a feature. Small, unambiguous fixes may be planned and implemented in a single pass.
-- **Escalated from Implement** — If an Implement step surfaces a small defect that must be resolved to continue, document it **inline in the active feature plan** (not as a separate fix doc), apply the fix, then return to Implement.
-
-### Objective
-Apply a narrow, well-scoped fix to an existing issue, with a lightweight record of what was done. No architectural decisions, no new features, no refactoring beyond what is required to resolve the stated problem.
-
-### Steps
-1. Determine whether the fix is **standalone** or **escalated**, and pick the documentation target accordingly (fix doc in `.agents/fix/` vs. inline in the active feature plan).
-2. Read the affected files to understand the current state.
-3. Identify the exact root cause of the issue described. Optionally, establish a confirming check including a failing test, a concrete reproduction step, or a specific error message if needed.
-4. Record the fix in the chosen document — scope, root cause, and the steps to apply it — following the structure in `.agents/feature/NNN-example.md`.
-5. Apply the fix, scoped strictly to what was described. Then, run any relevant verification steps to confirm the fix works and does not introduce new issues.
-6. Report what was changed and why. Fixes do **not** update `.agents/context/progress-tracker.md`.
-
-### Rules
-- No refactoring beyond the fix.
-- **No design or architectural decisions.** If the fix requires a design decision or touches more than the stated scope, present a recommendation and ask the user to confirm before proceeding.
-- Standalone fixes are documented in `.agents/fix/`; escalated fixes are documented inline in the feature plan that triggered them.
-- Update relevant feature plans when the fix resolves a tracked blocker.
-
----
-
-## Phase 5 — Meta
-
-**Trigger:** `Meta: [goal]`
-
-### Objective
-Improve the agent workflow system itself — the phases, templates, context files, docs, and tooling under `.agents/` and `AGENTS.md`.
-
-### Scope
-- Updating phase instructions in `AGENTS.md`
-- Adding, renaming, or restructuring `.agents/context/` files
-- Adding reference documents to `.agents/docs/`
-- Creating reusable templates or prompt patterns
-- Proposing new phases, sub-phases, or workflow conventions
-
-### Steps
-1. Understand the current state of the relevant workflow files.
-2. Identify what improvement is being requested and why it is needed.
-3. Draft the proposed changes and explain the rationale.
-4. For changes to core workflow files (`AGENTS.md`, context templates), confirm with the user before applying.
-5. Apply the changes and update `.agents/feature/` with a new or updated meta plan if the change is significant.
-
-### Rules
-- Meta is not a catch-all for general tasks — it targets the workflow system only.
-- Changes to `AGENTS.md` that affect all future phases should be treated with care; explain trade-offs before applying.
