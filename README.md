@@ -48,13 +48,7 @@ README.md                        ← This file
 
 ### 1. Set up your AI agent
 
-Copy or symlink `AGENTS.md` to the location your agent platform reads:
-
-| Platform | File location |
-|---|---|
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Cursor | `.cursorrules` |
-| Other | `AGENTS.md` (root) |
+This repository standardizes on root `AGENTS.md`, which is natively read by modern AI agent environments (Cursor, GitHub Copilot, Claude Code, Windsurf, Antigravity, etc.). No renaming or symlinking is needed.
 
 ### 2. Configure context files
 
