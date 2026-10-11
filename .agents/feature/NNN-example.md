@@ -21,6 +21,10 @@ ticket, so its absence is intentional rather than forgotten. -->
 > - Questions #1: [Description of question] — [Answer or note that it's still open]
 > - Questions #2: [Description of question] — [Answer or note that it's still open]
 
+> **Post-implementation fix (round 1) — 2026-01-02:** [What the user reported or requested].
+> Root cause: [What caused the issue].
+> Fix: [What was changed and where].
+
 ## Goal
 [One paragraph describing what this feature achieves and why.]
 
